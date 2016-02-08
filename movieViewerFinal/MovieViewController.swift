@@ -153,9 +153,6 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
         
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor.lightTextColor()
-        cell.selectedBackgroundView = backgroundView
         cell.selectionStyle = .None
         print("row \(indexPath.row)")
         return cell
