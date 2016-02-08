@@ -57,7 +57,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Movies" id="xpN-Rm-EjH"/>
+                    <navigationItem key="navigationItem" title="Movies" id="xpN-Rm-EjH">
+                        <barButtonItem key="backBarButtonItem" title="Previous" id="rNc-Pw-sEh"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="pbe-6p-m1V" id="K5Y-jr-X4V"/>
                     </connections>
@@ -134,9 +136,10 @@
             <objects>
                 <navigationController storyboardIdentifier="MoviesNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="WFx-tk-oyx" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="15P-He-iWQ">
+                    <navigationBar key="navigationBar" alpha="0.5" contentMode="scaleToFill" id="15P-He-iWQ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -148,4 +151,5 @@
             <point key="canvasLocation" x="234" y="337"/>
         </scene>
     </scenes>
+    <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
 </document>

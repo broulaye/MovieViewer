@@ -22,6 +22,25 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidLoad() {
          super.viewDidLoad()
         
+        
+        
+        self.navigationItem.title = "Movie"
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.setBackgroundImage(UIImage(named: "movie 2"), forBarMetrics: .Default)
+            
+            let shadow = NSShadow()
+            shadow.shadowColor = UIColor.grayColor().colorWithAlphaComponent(0.5)
+            shadow.shadowOffset = CGSizeMake(2, 2);
+            shadow.shadowBlurRadius = 4;
+            navigationBar.titleTextAttributes = [
+                NSFontAttributeName : UIFont.boldSystemFontOfSize(22),
+                NSForegroundColorAttributeName : UIColor(red: 0.5, green: 0.15, blue: 0.15, alpha: 0.8),
+                NSShadowAttributeName : shadow]
+        }
+        
+        
+        
+ 
         let spiningActivity = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         spiningActivity.label.text = "Loading"
         spiningActivity.detailsLabel.text = "Please wait"
@@ -30,7 +49,8 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
-        
+        self.tableView.backgroundColor = UIColor.lightGrayColor()
+        UITextField.appearanceWhenContainedInInstancesOfClasses([UISearchBar.self]).backgroundColor = UIColor.lightGrayColor()
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0))
             {
                
@@ -73,7 +93,6 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
                         
                 }
         }
-        
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
@@ -99,7 +118,7 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
     
-    func filterContentForSearchText(searchText: String, scope: String = "beginning") {
+    func filterContentForSearchText(searchText: String, scope: String = "All") {
         filteredMovies = movies!.filter { Movie in
             return Movie["title"]!.lowercaseString.containsString(searchText.lowercaseString)
         }
@@ -110,14 +129,16 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
+        
         
         var movie = movies![indexPath.row]
         if searchController.active && searchController.searchBar.text != "" {
             movie = filteredMovies[indexPath.row]
+            //tableView.reloadData()
         } else {
             movie = movies![indexPath.row]
         }
+        let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
         let title = movie["title"] as! String
         let overview = movie["overview"] as! String
         let baseURL = "http://image.tmdb.org/t/p/w500"
@@ -132,6 +153,10 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
         
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.lightTextColor()
+        cell.selectedBackgroundView = backgroundView
+        cell.selectionStyle = .None
         print("row \(indexPath.row)")
         return cell
         
@@ -176,6 +201,10 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
     };
     
     
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.clearColor()
+    }
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -183,7 +212,14 @@ class MovieViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let cell = sender as! UITableViewCell
         let indexPath = tableView.indexPathForCell(cell)
-        let movie = movies![indexPath!.row]
+        var movie = movies![indexPath!.row]
+        
+        if searchController.active && searchController.searchBar.text != "" {
+            movie = filteredMovies[indexPath!.row]
+            //tableView.reloadData()
+        } else {
+            movie = movies![indexPath!.row]
+        }
         
         let detailViewController = segue.destinationViewController as! DetailViewController
         detailViewController.movie = movie
